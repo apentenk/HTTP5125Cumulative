@@ -11,27 +11,16 @@ namespace Cumulative1.Controllers
     {
         private SchoolDbContext School = new SchoolDbContext();
 
-        
-        [HttpGet]
-        public Student MakeStudent(MySqlDataReader Row)
-        { 
-            Student student = new Student();
-            
-            student.FirstName = (string)Row["studentfname"];
-            student.StudentId = (uint)Row["studentid"];
-            student.LastName = (string)Row["studentlname"];
-            student.StudentNumber = (string)Row["studentnumber"];
-            student.EnrolDate = (DateTime)Row["enroldate"];
-            return student;
-        }
 
         /// <summary>
-        /// Returns a list of Students in the system
+        /// Returns a list of Students in the School database
         /// </summary>
-        /// <example>GET api/StudentData/ListStudents</example>
+        /// <param name="id">The key to search through student names</param>
         /// <returns>
         /// A list of student objects.
         /// </returns>
+        /// <example>GET api/StudentData/ListStudents -> -> [{"EnrolDate":"2018-06-18T00:00:00","FirstName":"Sarah","LastName":"Valdez","StudentId":"1","StudentNumber":"N1678"},{"EnrolDate":"2018-08-02T00:00:00","FirstName":"Jennifer","LastName":"Faulkner","StudentId":"2","StudentNumber":"N1679"}]</example>
+        /// <example>GET api/StudentData/ListStudents/Sarah -> [{"EnrolDate":"2018-06-18T00:00:00","FirstName":"Sarah","LastName":"Valdez","StudentId":"1","StudentNumber":"N1678"}]<example>
         [HttpGet]
         [Route("api/StudentData/ListStudents/{SearchKey?}")]
         public IEnumerable<Student> ListAllStudentData(string SearchKey = null)
@@ -57,10 +46,16 @@ namespace Cumulative1.Controllers
 
             while (ResultSet.Read())
             {
-                Student student = MakeStudent(ResultSet);
-                StudentsData.Add(student);
+                Student Student = new Student();
+                Student.FirstName = (string)ResultSet["studentfname"];
+                Student.StudentId = (uint)ResultSet["studentid"];
+                Student.LastName = (string)ResultSet["studentlname"];
+                Student.StudentNumber = (string)ResultSet["studentnumber"];
+                Student.EnrolDate = (DateTime)ResultSet["enroldate"];
+                StudentsData.Add(Student);
             }
 
+            //Close the connection between the web server and database
             Conn.Close();
 
             return StudentsData;
@@ -71,10 +66,12 @@ namespace Cumulative1.Controllers
         /// </summary>
         /// <param name="id">the student's ID in the database</param>
         /// <returns>An student object</returns>
+        /// <example>GET /api/StudentData/FindStudent/1 -> {"EnrolDate":"2018-06-18T00:00:00","FirstName":"Sarah","LastName":"Valdez","StudentId":"1","StudentNumber":"N1678"}</example>
         [HttpGet]
+        [Route("api/StudentData/ListStudent/{id}")]
         public Student FindStudent(int id)
         {
-            Student FoundStudent = new Student();
+            Student Student = new Student();
 
             //Create an instance of a connection
             MySqlConnection Conn = School.AccessDatabase();
@@ -95,11 +92,17 @@ namespace Cumulative1.Controllers
 
             while (ResultSet.Read())
             {
-                FoundStudent = MakeStudent(ResultSet);
+                Student.FirstName = (string)ResultSet["studentfname"];
+                Student.StudentId = (uint)ResultSet["studentid"];
+                Student.LastName = (string)ResultSet["studentlname"];
+                Student.StudentNumber = (string)ResultSet["studentnumber"];
+                Student.EnrolDate = (DateTime)ResultSet["enroldate"];
             }
 
+            //Close the connection between the web server and database
             Conn.Close();
-            return FoundStudent;
+
+            return Student;
         }
 
     }

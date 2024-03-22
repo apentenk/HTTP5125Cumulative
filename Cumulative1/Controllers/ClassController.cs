@@ -9,24 +9,26 @@ using System.Web.Mvc;
 
 namespace Cumulative1.Controllers
 {
-    public class CourseController : Controller
+    public class ClassController : Controller
     {
-        // GET: Teacher
+        // GET: Class
         public ActionResult Index()
         {
             return View();
         }
 
+        // GET: /Class/List
         public ActionResult List(string SearchKey = null)
         {
-            CourseDataController Controller = new CourseDataController();
+            ClassDataController Controller = new ClassDataController();
             IEnumerable<Course> Courses = Controller.ListAllCourseData(SearchKey);
             return View(Courses);
         }
 
+        //GET: /Class/Show/{id}
         public ActionResult Show(int id)
         {
-            CourseDataController Controller = new CourseDataController();
+            ClassDataController Controller = new ClassDataController();
             Course Course = Controller.FindCourse(id);
             return View(Course);
         }

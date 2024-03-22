@@ -17,6 +17,7 @@ namespace Cumulative1.Controllers
             return View();
         }
 
+        //GET: Teacher/List
         public ActionResult List(string SearchKey = null)
         {
             TeacherDataController Controller = new TeacherDataController();
@@ -24,11 +25,18 @@ namespace Cumulative1.Controllers
             return View(Teachers);
         }
 
+        //GET Teacher/Show/{id}
         public ActionResult Show(int id)
         {
-            TeacherDataController controller = new TeacherDataController();
-            Teacher Teacher = controller.FindTeacher(id);
-            return View(Teacher);
+            TeacherDataController TeacherController = new TeacherDataController();
+            Teacher Teacher = TeacherController.FindTeacher(id);
+            ClassDataController CourseController = new ClassDataController();
+            IEnumerable<Course> Courses = CourseController.ListTeacherCourses((long)id);
+            TeacherCourseList CourseList = new TeacherCourseList();
+            CourseList.Courses = Courses;
+            CourseList.Teacher = Teacher;
+            Debug.WriteLine(Courses.First());
+            return View(CourseList);
         }
     }
 }

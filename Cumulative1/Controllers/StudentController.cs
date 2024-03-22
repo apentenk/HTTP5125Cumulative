@@ -11,12 +11,13 @@ namespace Cumulative1.Controllers
 {
     public class StudentController : Controller
     {
-        // GET: Teacher
+        // GET: Student
         public ActionResult Index()
         {
             return View();
         }
 
+        // GET : /Student/List
         public ActionResult List(string SearchKey = null)
         {
             StudentDataController Controller = new StudentDataController();
@@ -24,6 +25,7 @@ namespace Cumulative1.Controllers
             return View(Students);
         }
 
+        //GET : /Student/Show/{id}
         public ActionResult Show(int id)
         {
             StudentDataController controller = new StudentDataController();

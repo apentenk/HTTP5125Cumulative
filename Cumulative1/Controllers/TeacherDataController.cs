@@ -10,27 +10,15 @@ namespace Cumulative1.Controllers
     {
         private SchoolDbContext School = new SchoolDbContext();
 
-        
-        [HttpGet]
-        public Teacher MakeTeacher(MySqlDataReader Row)
-        { 
-            Teacher teacher = new Teacher();
-            teacher.TeacherId = (int)Row["teacherid"];
-            teacher.FirstName = (string)Row["teacherfname"];
-            teacher.LastName = (string)Row["teacherlname"];
-            teacher.EmployeeNumber = (string)Row["employeenumber"];
-            teacher.HireDate = (DateTime)Row["hiredate"];
-            teacher.Salary = (decimal)Row["salary"];
-            return teacher;
-        }
-
         /// <summary>
-        /// Returns a list of Teachers in the system
+        /// Returns a list of Teachers in the School database
         /// </summary>
-        /// <example>GET api/TeacherData/ListTeachers</example>
+        /// <param name="id">The key to search through teachers names</param>
         /// <returns>
         /// A list of teacher objects.
         /// </returns>
+        /// <example>GET api/TeacherData/ListTeachers -> -> [{"EmployeeNumber":"T378","FirstName":"Alexander","HireDate":"2016-08-05T00:00:00","LastName":"Bennett","Salary":"55.30","TeacherId":"1"},{"EmployeeNumber":"T381","FirstName":"Caitlin","HireDate":"2014-06-10T00:00:00","LastName":"Cummings","Salary":"62.77","TeacherId":"2"}]</example>
+        /// <example>GET api/TeacherData/ListTeachers/Alex -> [{"EmployeeNumber":"T378","FirstName":"Alexander","HireDate":"2016-08-05T00:00:00","LastName":"Bennett","Salary":"55.30","TeacherId":"1"}]<example>
         [HttpGet]
         [Route("api/TeacherData/ListTeachers/{SearchKey?}")]
         public IEnumerable<Teacher> ListAllTeacherData(string SearchKey = null)
@@ -56,24 +44,34 @@ namespace Cumulative1.Controllers
 
             while (ResultSet.Read())
             {
-                Teacher teacher = MakeTeacher(ResultSet);
-                TeachersData.Add(teacher);
+                Teacher Teacher = new Teacher();
+                Teacher.TeacherId = (int)ResultSet["teacherid"];
+                Teacher.FirstName = (string)ResultSet["teacherfname"];
+                Teacher.LastName = (string)ResultSet["teacherlname"];
+                Teacher.EmployeeNumber = (string)ResultSet["employeenumber"];
+                Teacher.HireDate = (DateTime)ResultSet["hiredate"];
+                Teacher.Salary = (decimal)ResultSet["salary"];
+                TeachersData.Add(Teacher);
             }
 
+            //Close the connection between the web server and database
             Conn.Close();
 
             return TeachersData;
         }
+
 
         /// <summary>
         /// Returns an individual teacher from the database by specifying the primary key teacherid
         /// </summary>
         /// <param name="id">the teacher's ID in the database</param>
         /// <returns>An teacher object</returns>
+        /// <example>GET api/TeacherData/FindTeacher/1 -> [{"EmployeeNumber":"T378","FirstName":"Alexander","HireDate":"2016-08-05T00:00:00","LastName":"Bennett","Salary":"55.30","TeacherId":"1"}<example>
         [HttpGet]
+        [Route("api/TeacherData/ListTeacher/{id}")]
         public Teacher FindTeacher(int id)
         {
-            Teacher FoundTeacher = new Teacher();
+            Teacher Teacher = new Teacher();
 
             //Create an instance of a connection
             MySqlConnection Conn = School.AccessDatabase();
@@ -94,11 +92,18 @@ namespace Cumulative1.Controllers
 
             while (ResultSet.Read())
             {
-                FoundTeacher = MakeTeacher(ResultSet);
+                Teacher.TeacherId = (int)ResultSet["teacherid"];
+                Teacher.FirstName = (string)ResultSet["teacherfname"];
+                Teacher.LastName = (string)ResultSet["teacherlname"];
+                Teacher.EmployeeNumber = (string)ResultSet["employeenumber"];
+                Teacher.HireDate = (DateTime)ResultSet["hiredate"];
+                Teacher.Salary = (decimal)ResultSet["salary"];
             }
 
+            //Close the connection between the web server and database
             Conn.Close();
-            return FoundTeacher;
+
+            return Teacher;
         }
 
     }
