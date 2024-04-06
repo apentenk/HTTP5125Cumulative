@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Add Class";
+}
+
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/Class/List">Back To Classes</a>
+    </nav>
+    <h2>New Class</h2>
+    <div class="inputrow">
+        <label for="ClassCode">Class Code:</label>
+        <input type="text" id="ClassCode" name="ClassCode" />
+        <label for="ClassCode" class="error">Required Field</label>
+    </div>
+    <div class="inputrow">
+        <label for="ClassName">Class Name:</label>
+        <input type="text" id="ClassName" name="ClassName" />
+        <label for="ClassName" class="error">Required Field</label>
+
+    </div>
+    <div class="inputrow">
+        <label for="TeacherID">Teacher ID:</label>
+        <input type="text" id="TeacherID" name="TeacherID" />
+        <label for="TeacherID" class="error">Required Field</label>
+    </div>
+    <div class="inputrow">
+        <label for="StartDate">Start Date:</label>
+        <input type="date" id="StartDate" name="StartDate" />
+        <label for="StartDate" class="error">Required Field</label>
+    </div>
+    <div class="inputrow">
+        <label for="FinishDate">End Date:</label>
+        <input type="date" id="FinishDate" name="FinishDate" />
+        <label for="FinishDate" class="error">Required Field</label>
+    </div>
+    <div>
+        <button onclick="AddCourse();">Add Class</button>
+    </div>
+</div>

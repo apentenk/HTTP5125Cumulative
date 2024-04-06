@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace Cumulative1.Controllers
 {
@@ -103,6 +104,80 @@ namespace Cumulative1.Controllers
             Conn.Close();
 
             return Student;
+        }
+
+        /// <summary>
+        /// Adds an Student to the School Database.
+        /// </summary>
+        /// <param name="NewStudent">An object with fields that map to the columns of the students table. Non-Deterministic.</param>
+        /// <example>
+        /// POST api/StudentData/AddStudent 
+        /// FORM DATA / POST DATA / REQUEST BODY 
+        /// {
+        ///	"StudentFname":"John",
+        ///	"StudentLname":"Doe",
+        ///	"StudentNumber":"N402",
+        ///	"EnrollDate":"2015-05-15"
+        /// }
+        /// </example>
+        [HttpPost]
+        [Route("api/StudentData/AddStudent/")]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void AddStudent([FromBody] Student NewStudent)
+        {
+            //Create an instance of a connection
+            MySqlConnection Conn = School.AccessDatabase(); ;
+
+            //Open the connection between the web server and database
+            Conn.Open();
+
+            //Establish a new command (query) for our database
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "insert into students (studentfname, studentlname, studentnumber, enroldate) values (@StudentFname,@StudentLname,@StudentNumber, @EnrollDate)";
+            cmd.Parameters.AddWithValue("@StudentFname", NewStudent.FirstName);
+            cmd.Parameters.AddWithValue("@StudentLname", NewStudent.LastName);
+            cmd.Parameters.AddWithValue("@StudentNumber", NewStudent.StudentNumber);
+            cmd.Parameters.AddWithValue("@EnrollDate", NewStudent.EnrolDate);
+            cmd.Prepare();
+
+            //Execute Query
+            cmd.ExecuteNonQuery();
+
+            //Close the connection between the web server and database
+            Conn.Close();
+        }
+
+        /// <summary>
+        /// Deletes an Student from the School Database if the ID of that student exists. Does NOT maintain relational integrity. Non-Deterministic.
+        /// </summary>
+        /// <param name="id">The ID of the student.</param>
+        /// <example>POST /api/StudentData/DeleteStudent/3</example>
+        [HttpDelete]
+        [Route("api/StudentData/DeleteStudent/{id}")]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void DeleteStudent(int id)
+        {
+            //Create an instance of a connection
+            MySqlConnection Conn = School.AccessDatabase();
+
+            //Open the connection between the web server and database
+            Conn.Open();
+
+            //Establish a new command (query) for our database
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "Delete from students where studentid=@id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Prepare();
+
+            //Execute Query
+            cmd.ExecuteNonQuery();
+
+            //Close the connection between the web server and database
+            Conn.Close();
         }
 
     }

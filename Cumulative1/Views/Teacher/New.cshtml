@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Add Teacher";
+}
+
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/Teacher/List">Back To Teachers</a>
+    </nav>
+    <h2>New Teacher</h2>
+    <div class="inputrow">
+        <label for="TeacherFname">First Name:</label>
+        <input type="text" id="TeacherFname" name="TeacherFname" />
+        <label for="TeacherFname" class="error">Required Field</label>
+
+    </div>
+    <div class="inputrow">
+        <label for="TeacherLname">Last Name:</label>
+        <input type="text" id="TeacherLname" name="TeacherLname" />
+        <label for="TeacherLname" class="error">Required Field</label>
+    </div>
+    <div class="inputrow">
+        <label for="EmployeeNumber">Employee Number:</label>
+        <input type="text" id="EmployeeNumber" name="EmployeeNumber" placeholder="T000" />
+        <label for="EmployeeNumber" class="error">Please enter valid employee number</label>
+    </div>
+    <div class="inputrow">
+        <label for="HireDate">Hire Date:</label>
+        <input type="date" id="HireDate" name="HireDate" />
+        <label for="HireDate" class="error">Required Field</label>
+    </div>
+    <div class="inputrow">
+        <label for="Salary">Salary:</label>
+        <input type="text" id="Salary" name="Salary" placeholder="0.00" />
+        <label for="Salary" class="error">Please enter valid salary</label>
+    </div>
+    <div>
+        <button onclick="AddTeacher();">Add Teacher</button>
+    </div>
+</div>

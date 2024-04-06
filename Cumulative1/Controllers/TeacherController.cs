@@ -35,8 +35,23 @@ namespace Cumulative1.Controllers
             TeacherCourseList CourseList = new TeacherCourseList();
             CourseList.Courses = Courses;
             CourseList.Teacher = Teacher;
-            Debug.WriteLine(Courses.First());
             return View(CourseList);
+        }
+
+        //GET Teacher/New
+        public ActionResult New()
+        {
+            return View();
+        }
+
+        //GET : /Teacher/DeleteConfirm/{id}
+        public ActionResult DeleteConfirm(int id)
+        {
+            TeacherDataController controller = new TeacherDataController();
+            Teacher NewTeacher = controller.FindTeacher(id);
+
+
+            return View(NewTeacher);
         }
     }
 }

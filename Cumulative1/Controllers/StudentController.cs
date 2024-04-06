@@ -32,5 +32,30 @@ namespace Cumulative1.Controllers
             Student Students = controller.FindStudent(id);
             return View(Students);
         }
+
+        //GET Student/New
+        public ActionResult New()
+        {
+            return View();
+        }
+
+        /*/POST : /Student/Delete/{id}
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            StudentDataController controller = new StudentDataController();
+            controller.DeleteStudent(id);
+            return RedirectToAction("List");
+        }*/
+
+        //GET : /Student/DeleteConfirm/{id}
+        public ActionResult DeleteConfirm(int id)
+        {
+            StudentDataController controller = new StudentDataController();
+            Student NewStudent = controller.FindStudent(id);
+
+
+            return View(NewStudent);
+        }
     }
 }

@@ -1,0 +1,17 @@
+﻿﻿@model Cumulative1.Models.Course
+
+@{
+    ViewBag.Title = "Delete Class";
+}
+
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/Class/Show/@Model.ClassId">Cancel</a>
+    </nav>
+    <h2>Are you sure you want to delete @Model.ClassCode @Model.ClassName?</h2>
+    <p>This action cannot be undone.</p>
+    <button class="delbutton" onclick="DeleteCourse(@Model.ClassId);">
+        Confirm Delete
+    </button>
+</div>

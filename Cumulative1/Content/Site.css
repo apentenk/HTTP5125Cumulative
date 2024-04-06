@@ -10,4 +10,20 @@ input,
 select,
 textarea {
     max-width: 280px;
+    margin: 3px;
+}
+
+.error {
+    color: red;
+    display: none;
+}
+
+.inputError {
+    border-style: solid;
+    border-color: red;
+}
+
+.inputError:focus-visible{
+    outline-color: red;
+    outline-style: ridge;
 }

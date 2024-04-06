@@ -32,5 +32,22 @@ namespace Cumulative1.Controllers
             Course Course = Controller.FindCourse(id);
             return View(Course);
         }
+
+        //GET Class/New
+        public ActionResult New()
+        {
+            return View();
+        }
+
+
+        //GET : /Class/DeleteConfirm/{id}
+        public ActionResult DeleteConfirm(int id)
+        {
+            ClassDataController controller = new ClassDataController();
+            Course NewCourse = controller.FindCourse(id);
+
+
+            return View(NewCourse);
+        }
     }
 }

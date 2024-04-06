@@ -3,8 +3,11 @@
     ViewBag.Title = "Show";
 }
 
-<a class="navlink" href="/Teacher/List">Back To Teachers</a>
 <div id="containershow">
+    <nav>
+        <a class="navlink" href="/Teacher/List">Back To Teachers</a>
+        <a class="dellink" href="/Teacher/DeleteConfirm/@Model.Teacher.TeacherId">Delete</a>
+    </nav>
     <h2>@Model.Teacher.FirstName @Model.Teacher.LastName</h2>
 </div>
 @foreach (var course in Model.Courses)

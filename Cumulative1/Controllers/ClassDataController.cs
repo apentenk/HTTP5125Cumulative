@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace Cumulative1.Controllers
 {
@@ -47,7 +48,7 @@ namespace Cumulative1.Controllers
                 Course Course = new Course();
                 Course.ClassId = (int)ResultSet["classid"];
                 Course.ClassCode = (string)ResultSet["classcode"];
-                Course.TeacherID = (long)ResultSet["teacherid"];
+                if (ResultSet["teacherid"].GetType() != typeof(DBNull)) Course.TeacherID = (long)ResultSet["teacherid"];
                 Course.StartDate = (DateTime)ResultSet["startdate"];
                 Course.FinishDate = (DateTime)ResultSet["finishdate"];
                 Course.ClassName = (string)ResultSet["classname"];
@@ -93,7 +94,7 @@ namespace Cumulative1.Controllers
                 Course Course = new Course();
                 Course.ClassId = (int)ResultSet["classid"];
                 Course.ClassCode = (string)ResultSet["classcode"];
-                Course.TeacherID = (long)ResultSet["teacherid"];
+                if (ResultSet["teacherid"].GetType() != typeof(DBNull)) Course.TeacherID = (long)ResultSet["teacherid"];
                 Course.StartDate = (DateTime)ResultSet["startdate"];
                 Course.FinishDate = (DateTime)ResultSet["finishdate"];
                 Course.ClassName = (string)ResultSet["classname"]; ;
@@ -139,7 +140,7 @@ namespace Cumulative1.Controllers
             {
                 Course.ClassId = (int)ResultSet["classid"];
                 Course.ClassCode = (string)ResultSet["classcode"];
-                Course.TeacherID = (long)ResultSet["teacherid"];
+                if (ResultSet["teacherid"].GetType() != typeof(DBNull)) Course.TeacherID = (long)ResultSet["teacherid"];
                 Course.StartDate = (DateTime)ResultSet["startdate"];
                 Course.FinishDate = (DateTime)ResultSet["finishdate"];
                 Course.ClassName = (string)ResultSet["classname"]; ;
@@ -149,6 +150,85 @@ namespace Cumulative1.Controllers
             Conn.Close();
             
             return Course;
+        }
+
+        /// <summary>
+        /// Adds an Class to the School Database.
+        /// </summary>
+        /// <param name="NewCourse">An object with fields that map to the columns of the classes table. Non-Deterministic.</param>
+        /// <example>
+        /// POST api/ClassData/AddClass 
+        /// FORM DATA / POST DATA / REQUEST BODY 
+        /// {
+        ///	"ClassCode":"http5101",
+        ///	"ClassName":"Web Application Development",
+        ///	"TeacherID":"1",
+        ///	"StartDate":"2018-09-04"
+        ///	"FinishDate":"2018-12-14"
+        /// }
+        /// </example>
+        [HttpPost]
+        [Route("api/ClassData/AddClass/")]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void AddCourse([FromBody] Course NewCourse)
+        {
+            //Create an instance of a connection
+            MySqlConnection Conn = School.AccessDatabase();
+
+            //Open the connection between the web server and database
+            Conn.Open();
+
+            //Establish a new command (query) for our database
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "insert into classes (className, classCode, teacherID, startDate, finishDate) values (@ClassName, @ClassCode, @TeacherID, @StartDate, @FinishDate)";
+            cmd.Parameters.AddWithValue("@ClassName", NewCourse.ClassName);
+            cmd.Parameters.AddWithValue("@ClassCode", NewCourse.ClassCode);
+            cmd.Parameters.AddWithValue("@TeacherID", NewCourse.TeacherID);
+            cmd.Parameters.AddWithValue("@StartDate", NewCourse.StartDate);
+            cmd.Parameters.AddWithValue("@FinishDate", NewCourse.FinishDate);
+            cmd.Prepare();
+
+            //Execute Query
+            cmd.ExecuteNonQuery();
+
+            //Close the connection between the web server and database
+            Conn.Close();
+
+        }
+
+        /// <summary>
+        /// Deletes a Class from the School Database if the ID of that class exists. Does NOT maintain relational integrity. Non-Deterministic.
+        /// </summary>
+        /// <param name="id">The ID of the Class.</param>
+        /// <example>POST /api/ClassData/DeleteClass/3</example>
+        [HttpDelete]
+        [Route("api/ClassData/DeleteClass/{id}")]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void DeleteClass(int id)
+        {
+            //Create an instance of a connection
+            MySqlConnection Conn = School.AccessDatabase();
+
+            //Open the connection between the web server and database
+            Conn.Open();
+
+            //Establish a new command (query) for our database
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "Delete from classes where classid=@id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Prepare();
+
+            //Execute Query
+            cmd.ExecuteNonQuery();
+
+            //Close the connection between the web server and database
+            Conn.Close();
+
+
         }
 
     }

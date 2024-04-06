@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Add Student";
+}
+
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/Student/List">Back To Students</a>
+    </nav>
+    <h2>New Student</h2>
+    <div class="inputrow">
+        <label for="StudentFname">First Name:</label>
+        <input type="text" id="StudentFname" name="StudentFname" />
+        <label for="StudentFname" class="error">Required Field</label>
+    </div>
+    <div class="inputrow">
+        <label for="StudentLname">Last Name:</label>
+        <input type="text" id="StudentLname" name="StudentLname" />
+        <label for="StudentLname" class="error">Required Field</label>
+    </div>
+    <div class="inputrow">
+        <label for="StudentNumber">Student Number:</label>
+        <input type="text" id="StudentNumber" name="StudentNumber" placeholder="N000" />
+        <label for="StudentNumber" class="error">Please enter valid student number</label>
+    </div>
+    <div class="inputrow">
+        <label for="EnrollDate">Enroll Date:</label>
+        <input type="date" id="EnrollDate" name="EnrollDate" />
+        <label for="EnrollDate" class="error">Required Field</label>
+    </div>
+    <div>
+        <button onclick="AddStudent();">Add Student</button>
+    </div>
+
+</div>

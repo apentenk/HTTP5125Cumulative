@@ -2,7 +2,9 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace Cumulative1.Controllers
 {
@@ -106,5 +108,96 @@ namespace Cumulative1.Controllers
             return Teacher;
         }
 
+        /// <summary>
+        /// Adds an Teacher to the School Database.
+        /// </summary>
+        /// <param name="NewTeacher">An object with fields that map to the columns of the teachers table. Non-Deterministic.</param>
+        /// <example>
+        /// POST api/TeacherData/AddTeacher 
+        /// FORM DATA / POST DATA / REQUEST BODY 
+        /// {
+        ///	"TeacherFname":"John",
+        ///	"TeacherLname":"Doe",
+        ///	"EmployeeNumber":"T402",
+        ///	"HireDate":"2015-05-15 00:00:00"
+        ///	"salary":63.84
+        /// }
+        /// </example>
+        [HttpPost]
+        [Route("api/TeacherData/AddTeacher/")]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void AddTeacher([FromBody] Teacher NewTeacher)
+        {
+            //Create an instance of a connection
+            MySqlConnection Conn = School.AccessDatabase();
+
+            Debug.WriteLine(NewTeacher.FirstName);
+
+            //Open the connection between the web server and database
+            Conn.Open();
+
+            //Establish a new command (query) for our database
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "insert into teachers (teacherfname, teacherlname, employeenumber, hiredate, salary) values (@TeacherFname,@TeacherLname,@EmployeeNumber, @HireDate, @Salary)";
+            cmd.Parameters.AddWithValue("@TeacherFname", NewTeacher.FirstName);
+            cmd.Parameters.AddWithValue("@TeacherLname", NewTeacher.LastName);
+            cmd.Parameters.AddWithValue("@EmployeeNumber", NewTeacher.EmployeeNumber);
+            cmd.Parameters.AddWithValue("@HireDate", NewTeacher.HireDate);
+            cmd.Parameters.AddWithValue("@Salary", NewTeacher.Salary);
+            cmd.Prepare();
+
+            //Execute Query
+            cmd.ExecuteNonQuery();
+
+            //Close the connection between the web server and database
+            Conn.Close();
+
+
+
+        }
+        /// <summary>
+        /// Deletes an Teacher from the School Database if the ID of that teacher exists. Maintains relational integrity. Non-Deterministic.
+        /// </summary>
+        /// <param name="id">The ID of the teacher.</param>
+        /// <example>POST /api/TeacherData/DeleteTeacher/3</example>
+        [HttpDelete]
+        [Route("api/TeacherData/DeleteTeacher/{id}")]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void DeleteTeacher(int id)
+        {
+            //Create an instance of a connection
+            MySqlConnection Conn = School.AccessDatabase();
+
+            //Open the connection between the web server and database
+            Conn.Open();
+
+            //Establish a new command (query) for our database
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "Delete from teachers where teacherid=@id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Prepare();
+
+
+            cmd.ExecuteNonQuery();
+
+            //Updating Courses
+            cmd.CommandText = "Update classes set teacherid =  null where teacherid = @tid";
+            cmd.Parameters.AddWithValue("@tid", id);
+            cmd.Prepare();
+
+            //Execute Query
+            cmd.ExecuteNonQuery();
+
+            //Close the connection between the web server and database
+            Conn.Close();
+
+
+        }
+
     }
+
 }
