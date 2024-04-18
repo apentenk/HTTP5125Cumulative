@@ -1,0 +1,36 @@
+﻿@model Cumulative1.Models.Course
+@{
+    ViewBag.Title = "Update";
+}
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/Class/List">Back To Classes</a>
+    </nav>
+    <h2>Update @Model.ClassCode @Model.ClassName</h2>
+
+    <div class="inputrow">
+        <label for="ClassCode">Class Code:</label>
+        <input type="text" id="ClassCode" name="ClassCode" value="@Model.ClassCode" />
+
+    </div>
+    <div class="inputrow">
+        <label for="ClassName">Class Name:</label>
+        <input type="text" id="ClassName" name="ClassName" value="@Model.ClassName" />
+    </div>
+    <div class="inputrow">
+        <label for="TeacherID">Teacher ID:</label>
+        <input type="text" id="TeacherID" name="TeacherID" value="@Model.TeacherID" />
+        @Html.ValidationMessageFor(@Model => Model.TeacherID)
+    </div>
+    <div class="inputrow">
+        <label for="StartDate">Start Date:</label>
+        <input type="date" id="StartDate" name="StartDate" value="@string.Format("{0:yyyy-MM-dd}", Model.StartDate)" />
+    </div>
+    <div class="inputrow">
+        <label for="FinishDate">Finish Date:</label>
+        <input type="date" id="FinishDate" name="FinishDate" value="@string.Format("{0:yyyy-MM-dd}", Model.FinishDate)" />
+    </div>
+    <button onclick="UpdateCourse(@Model.ClassId);">Update Class</button>
+</div>
+

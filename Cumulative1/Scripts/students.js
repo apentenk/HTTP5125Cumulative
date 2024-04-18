@@ -58,7 +58,46 @@ function DeleteStudent(id) {
     xhr.send();
 }
 
+function UpdateStudent(id) {
+    var URL = "http://localhost:49934/api/StudentData/UpdateStudent/" + id;
+
+    var xhr = new XMLHttpRequest();
+
+    //Getting Input Data from the form
+    var StudentFname = document.getElementById('StudentFname');
+    var StudentLname = document.getElementById('StudentLname');
+    var StudentNumber = document.getElementById('StudentNumber');
+    var EnrollDate = document.getElementById('EnrolDate');
+
+    //Validating the data
+    var valid = ValidateStudentForm(StudentFname, StudentLname, StudentNumber, EnrollDate);
+
+    if (valid === 0) {
+        return;
+    }
+
+    //Mapping data to object
+    var StudentData = {
+        "FirstName": StudentFname.value,
+        "LastName": StudentLname.value,
+        "StudentNumber": StudentNumber.value,
+        "EnrolDate": EnrollDate.value
+    };
+
+    //Generating UPDATE request
+    xhr.open("POST", URL, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 204) {
+            window.location.replace("../Show/" + id);
+        }
+    }
+    xhr.send(JSON.stringify(StudentData));
+}
+
 function ValidateStudentForm(StundentFname, StudentLname, StudentNumber, EnrollDate) {
     //Determining that there is no invalid data
+    //Bitwise AND so that there is no short circuit evalution and all fields are validated
     return validateInputData(EnrollDate) & validateInputDataRegex(StudentNumber, STUDENT_NUMBER_REGEX) & validateInputData(StudentLname) & validateInputData(StundentFname);
 }

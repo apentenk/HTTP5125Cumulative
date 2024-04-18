@@ -39,15 +39,6 @@ namespace Cumulative1.Controllers
             return View();
         }
 
-        /*/POST : /Student/Delete/{id}
-        [HttpPost]
-        public ActionResult Delete(int id)
-        {
-            StudentDataController controller = new StudentDataController();
-            controller.DeleteStudent(id);
-            return RedirectToAction("List");
-        }*/
-
         //GET : /Student/DeleteConfirm/{id}
         public ActionResult DeleteConfirm(int id)
         {
@@ -56,6 +47,31 @@ namespace Cumulative1.Controllers
 
 
             return View(NewStudent);
+        }
+
+        //POST : /Student/Update
+        [HttpPost]
+        public ActionResult Update(int id, string StudentFname, string StudentLname, string StudentNumber, DateTime HireDate)
+        {
+            Student StudentInfo = new Student();
+            StudentInfo.FirstName = StudentFname;
+            StudentInfo.LastName = StudentLname;
+            StudentInfo.StudentNumber = StudentNumber;
+            StudentInfo.EnrolDate = HireDate;
+
+            StudentDataController controller = new StudentDataController();
+            controller.UpdateStudent(id, StudentInfo);
+
+            return RedirectToAction("Show/" + id);
+        }
+
+        //GET : /Student/Update/{id}
+        public ActionResult Update(int id)
+        {
+            StudentDataController controller = new StudentDataController();
+            Student SelectedStudent = controller.FindStudent(id);
+
+            return View(SelectedStudent);
         }
     }
 }

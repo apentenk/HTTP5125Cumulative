@@ -58,7 +58,49 @@ function DeleteCourse(id) {
     xhr.send();
 }
 
-function ValidateClassForm(ClassCode, ClassName) {
+function UpdateCourse(id) {
+    var URL = "http://localhost:49934/api/ClassData/UpdateClass/" + id;
+
+    var xhr = new XMLHttpRequest();
+
+    //Getting Input Data from the form
+    var ClassCode = document.getElementById('ClassCode');
+    var ClassName = document.getElementById('ClassName');
+    var TeacherID = document.getElementById('TeacherID');
+    var StartDate = document.getElementById('StartDate');
+    var FinishDate = document.getElementById('FinishDate');
+
+    //Validating the data
+    var valid = ValidateClassForm(ClassCode, ClassName, TeacherID, StartDate, FinishDate);
+
+    if (valid === 0) {
+        return;
+    }
+
+    //Mapping data to object
+    var CourseData = {
+        "ClassCode": ClassCode.value,
+        "ClassName": ClassName.value,
+        "TeacherID": TeacherID.value,
+        "StartDate": StartDate.value,
+        "FinishDate": FinishDate.value
+    };
+
+    //Generating UPDATE request
+    xhr.open("POST", URL, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 204) {
+            //Redirecting after successful response
+            window.location.replace("../Show/" + id);
+        }
+    }
+    xhr.send(JSON.stringify(CourseData));
+}
+
+function ValidateClassForm(ClassCode, ClassName, TeacherID, StartDate, FinishDate) {
     //Determining that there is no invalid data
+    //Bitwise AND so that there is no short circuit evalution and all fields are validated
     return validateInputData(FinishDate) & validateInputData(StartDate) & validateInputData(TeacherID) & validateInputData(ClassName) & validateInputData(ClassCode);
 }

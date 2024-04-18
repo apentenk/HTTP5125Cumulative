@@ -49,5 +49,31 @@ namespace Cumulative1.Controllers
 
             return View(NewCourse);
         }
+
+        //POST : /Course/Update
+        [HttpPost]
+        public ActionResult Update(int id, string ClassCode, string ClassName, DateTime StartDate, DateTime FinishDate, long TeacherID)
+        {
+            Course CourseInfo = new Course();
+            CourseInfo.ClassCode = ClassCode;
+            CourseInfo.ClassName = ClassName;
+            CourseInfo.StartDate = StartDate;
+            CourseInfo.FinishDate = FinishDate;
+            CourseInfo.TeacherID = TeacherID;
+
+            ClassDataController controller = new ClassDataController();
+            controller.UpdateCourse(id, CourseInfo);
+
+            return RedirectToAction("Show/" + id);
+        }
+
+        //GET : /Course/Update/{id}
+        public ActionResult Update(int id)
+        {
+            ClassDataController controller = new ClassDataController();
+            Course SelectedClass = controller.FindCourse(id);
+
+            return View(SelectedClass);
+        }
     }
 }

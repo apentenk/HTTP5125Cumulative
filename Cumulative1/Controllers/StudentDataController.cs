@@ -180,5 +180,50 @@ namespace Cumulative1.Controllers
             Conn.Close();
         }
 
+        /// <summary>
+        /// Updates a Student from the School Database. 
+        /// </summary>
+        /// <param name="id">the student's ID in the database</param>
+        /// <param name="StudentInfo">An object with fields that map to the columns of the student's table.</param>
+        /// <example>
+        /// POST api/StudentData/UpdateStudent/208 
+        /// FORM DATA / POST DATA / REQUEST BODY 
+        /// {
+        ///	"StudentFname":"John",
+        ///	"StudentLname":"Doe",
+        ///	"StudentNumber":"T402",
+        ///	"EnrolDate":"2015-05-15 00:00:00"
+        /// }
+        /// </example>
+        [HttpPost]
+        [Route("api/StudentData/UpdateStudent/{id}")]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void UpdateStudent(int id, [FromBody] Student StudentInfo)
+        {
+            //Create an instance of a connection
+            MySqlConnection Conn = School.AccessDatabase();
+
+            //Open the connection between the web server and database
+            Conn.Open();
+
+            //Establish a new command (query) for our database
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "update students set studentFname=@StudentFname, studentlname=@StudentLname, StudentNumber=@StudentNumber, enroldate=@EnrolDate  where studentid=@StudentId";
+            cmd.Parameters.AddWithValue("@StudentFname", StudentInfo.FirstName);
+            cmd.Parameters.AddWithValue("@StudentLname", StudentInfo.LastName);
+            cmd.Parameters.AddWithValue("@StudentNumber", StudentInfo.StudentNumber);
+            cmd.Parameters.AddWithValue("@EnrolDate", StudentInfo.EnrolDate);
+            cmd.Parameters.AddWithValue("@StudentId", id);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
+
+
+        }
+
     }
 }

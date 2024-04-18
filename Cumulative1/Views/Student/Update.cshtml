@@ -1,0 +1,31 @@
+﻿@model Cumulative1.Models.Student
+@{
+    ViewBag.Title = "Update";
+}
+
+<div id="containershow">
+    <nav>
+        <a class="navlink" href="/Student/List">Back To Students</a>
+    </nav>
+    <h2>Update @Model.FirstName  @Model.LastName</h2>
+
+    <div class="inputrow">
+        <label for="StudentFname">First Name:</label>
+        <input type="text" id="StudentFname" name="StudentFname" value="@Model.FirstName" />
+
+    </div>
+    <div class="inputrow">
+        <label for="StudentLname">Last Name:</label>
+        <input type="text" id="StudentLname" name="StudentLname" value="@Model.LastName" />
+    </div>
+    <div class="inputrow">
+        <label for="StudentNumber">Student Number:</label>
+        <input id="StudentNumber" name="StudentNumber" value="@Model.StudentNumber" />
+    </div>
+    <div class="inputrow">
+        <label for="EnrolDate">Enroll Date:</label>
+        <input type="date" id="EnrolDate" name="EnrolDate" value="@string.Format("{0:yyyy-MM-dd}", Model.EnrolDate)" />
+    </div>
+    <button onclick="UpdateStudent(@Model.StudentId);">Update Student</button>
+</div>
+
